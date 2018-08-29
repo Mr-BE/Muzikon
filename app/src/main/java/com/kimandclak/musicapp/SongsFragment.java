@@ -2,13 +2,15 @@ package com.kimandclak.musicapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.bottomappbar.BottomAppBar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -21,6 +23,7 @@ public class SongsFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     SongObject[] myDataset;
+    boolean isPlaying;
 
     public SongsFragment() {
     }
@@ -33,7 +36,7 @@ public class SongsFragment extends Fragment{
         mRecyclerView = rootView.findViewById(R.id.song_recycler);
 
         myDataset = new SongObject[] {new SongObject("Survival", "Drake","Scorpion",
-                R.drawable.drake_sp ), new SongObject("God's Plan", "Drake","Scorpion", R.drawable.drake_gods_plan)} ;
+                R.drawable.album1), new SongObject("God's Plan", "Drake", "Scorpion", R.drawable.drake_gods_plan)};
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -48,11 +51,42 @@ public class SongsFragment extends Fragment{
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                SongObject movie = myDataset[position];
-                Toast.makeText(getContext(), movie.getmTitle() + " is selected!", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(getActivity(), NowPlaying.class);
-                i.putExtra("Song", movie);
-                startActivity(i);
+                SongObject song = myDataset[position];
+
+                //Setting Song thumbnail on bottom bar
+                AppCompatImageView songImg = getActivity().findViewById(R.id.bottom_bar_thumbnail);
+                songImg.setImageResource(song.getmImageId());
+
+                //Setting main info text
+                AppCompatTextView title = getActivity().findViewById(R.id.bottom_bar_main_text);
+                title.setText(song.getmTitle());
+                title.setOnClickListener(e -> {
+                    Intent i = new Intent(getActivity(), NowPlaying.class);
+                    i.putExtra("Song", song);
+                    i.putExtra("isPlaying", isPlaying);
+                    startActivity(i);
+                });
+
+                //Setting sub info text
+                AppCompatTextView otherInfo = getActivity().findViewById(R.id.bottom_bar_sub_text);
+                otherInfo.setText(song.getmArtist() + "-" + song.getmAlbum());
+
+                //Show Bottom app bar
+                BottomAppBar bottomAppBar = getActivity().findViewById(R.id.bottom_bar);
+                bottomAppBar.setVisibility(View.VISIBLE);
+
+                isPlaying = true;
+
+                AppCompatImageView bottomPlay = getActivity().findViewById(R.id.bottom_bar_play);
+                bottomPlay.setOnClickListener(e -> {
+                    if (isPlaying) {
+                        bottomPlay.setImageResource(R.drawable.round_play_arrow_white_48dp);
+                        isPlaying = false;
+                    } else {
+                        bottomPlay.setImageResource(R.drawable.pause_white);
+                        isPlaying = true;
+                    }
+                });
             }
 
             @Override

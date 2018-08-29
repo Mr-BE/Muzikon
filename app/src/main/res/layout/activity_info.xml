@@ -15,6 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="@string/info_title"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -22,42 +23,49 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:padding="16dp">
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/info_img"
             android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginRight="16dp"/>
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/info_album_title"
+            android:layout_height="160dp" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@id/info_img"
-            android:textSize="@dimen/text_16sp"
-            android:textColor="@color/colorPrimary"
-            android:fontFamily="@font/roboto_bold"/>
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/info_artist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_12sp"
-            android:layout_alignBottom="@id/info_album_title"
-            android:textColor="@color/colorPrimary"
-            android:fontFamily="@font/roboto_bold"/>
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/info_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/info_artist"
-            android:textColor="@color/colorPrimary"
-            android:fontFamily="@font/roboto_bold"/>
+            android:layout_alignLeft="@id/info_img"
+            android:layout_marginLeft="176dp"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/info_album_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/info_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_medium" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/info_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
 
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/info_recycler"
-        android:layout_alignBottom="@id/info_img"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="224dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>

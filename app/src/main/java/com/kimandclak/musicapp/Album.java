@@ -44,15 +44,19 @@ public class Album implements Parcelable {
         }
     };
 
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
-    public SongObject[] getmSongs() {
+    public String getArtist() {
+        return mArtist;
+    }
+
+    public SongObject[] getSongs() {
         return mSongs;
     }
 
-    public int getmThumbnail() {
+    public int getThumbnail() {
         return mThumbnail;
     }
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,14 +12,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.PopupMenu;
+
 import com.kimandclak.musicapp.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
@@ -90,7 +87,7 @@ public class AlbumFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Album movie = l.get(position);
-                Toast.makeText(getContext(), movie.getmTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), movie.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity(), InfoActivity.class);
                 i.putExtra("Album", movie);
                 startActivity(i);
@@ -129,17 +126,12 @@ public class AlbumFragment extends Fragment {
         private Context mContext;
         private List<Album> albumList;
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView title, count;
-            public ImageView thumbnail, overflow;
-
-            public MyViewHolder(View view) {
-                super(view);
-                title = view.findViewById(R.id.title);
-                count = view.findViewById(R.id.count);
-                thumbnail = view.findViewById(R.id.thumbnail);
-                overflow = view.findViewById(R.id.overflow);
-            }
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            Album album = albumList.get(position);
+            holder.title.setText(album.getTitle());
+            holder.count.setText(album.getNumOfSongs() + getString(R.string.songs));
+            holder.thumbnail.setImageResource(album.getThumbnail());
         }
 
 
@@ -155,58 +147,19 @@ public class AlbumFragment extends Fragment {
             return new MyViewHolder(itemView);
         }
 
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
-            Album album = albumList.get(position);
-            holder.title.setText(album.getmTitle());
-            holder.count.setText(album.getNumOfSongs() + getString(R.string.songs));
-            holder.thumbnail.setImageResource(album.getmThumbnail());
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView title;
+            public TextView count;
+            public ImageView thumbnail;
 
-            // loading album cover using Glide library
-            //Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
-
-            holder.overflow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showPopupMenu(holder.overflow);
-                }
-            });
-        }
-
-        /**
-         * Showing popup menu when tapping on 3 dots
-         */
-        private void showPopupMenu(View view) {
-            // inflate menu
-            PopupMenu popup = new PopupMenu(mContext, view);
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.menu_album_card, popup.getMenu());
-            popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
-            popup.show();
-        }
-
-        /**
-         * Click listener for popup menu items
-         */
-        class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-
-            public MyMenuItemClickListener() {
-            }
-
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.action_add_favourite:
-                        Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.action_play_next:
-                        Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
-                        return true;
-                    default:
-                }
-                return false;
+            public MyViewHolder(View view) {
+                super(view);
+                title = view.findViewById(R.id.title);
+                count = view.findViewById(R.id.count);
+                thumbnail = view.findViewById(R.id.thumbnail);
             }
         }
+
 
         @Override
         public int getItemCount() {

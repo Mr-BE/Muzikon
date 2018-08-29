@@ -6,4 +6,5 @@
     <color name="black">#000</color>
     <color name="album_title">#777576</color>
     <color name="app_pink">#E27E9D</color>
+    <color name="now_p_transp">#7d48343e</color>
 </resources>

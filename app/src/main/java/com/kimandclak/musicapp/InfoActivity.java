@@ -24,19 +24,19 @@ public class InfoActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.info_recycler);
 
         AppCompatImageView imageView = findViewById(R.id.info_img);
-        imageView.setImageResource(currentAlbum.getmThumbnail());
+        imageView.setImageResource(currentAlbum.getThumbnail());
 
         AppCompatTextView title = findViewById(R.id.info_album_title);
-        title.setText(currentAlbum.getmTitle());
+        title.setText(currentAlbum.getTitle());
 
         AppCompatTextView artist = findViewById(R.id.info_artist);
-        artist.setText(currentAlbum.getmTitle());
+        artist.setText(currentAlbum.getArtist());
 
         AppCompatTextView year = findViewById(R.id.info_year);
         year.setText("2018");
 
 
-        SongObject[] myDataset = currentAlbum.getmSongs();
+        SongObject[] myDataset = currentAlbum.getSongs();
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
