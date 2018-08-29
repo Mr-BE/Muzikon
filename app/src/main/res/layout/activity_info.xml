@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/info_img"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginRight="16dp"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/info_album_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/info_img"
+            android:textSize="@dimen/text_16sp"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/roboto_bold"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/info_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_12sp"
+            android:layout_alignBottom="@id/info_album_title"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/roboto_bold"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/info_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/info_artist"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/roboto_bold"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/info_recycler"
+        android:layout_alignBottom="@id/info_img"
+        android:layout_marginTop="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+
+
+</android.support.design.widget.CoordinatorLayout>
