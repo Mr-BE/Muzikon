@@ -1,72 +1,48 @@
 package com.kimandclak.musicapp.dummy;
 
+import com.kimandclak.musicapp.Album;
+import com.kimandclak.musicapp.R;
+import com.kimandclak.musicapp.SongObject;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
+ * Helper class for providing sample album content
  */
 public class DummyContent {
 
-    /**
-     * An array of sample (dummy) items.
-     */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public DummyContent() {
 
-    /**
-     * A map of sample (dummy) items, by ID.
-     */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
-
-    private static final int COUNT = 25;
-
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
-        }
     }
 
-    private static void addItem(DummyItem item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
-    }
+    public static List<Album> getData() {
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
+        List<Album> albums = new ArrayList<>();
+        List<SongObject> songs = new ArrayList<>();
+        songs.add(new SongObject("Survival", "Drake", "Scorpion", R.drawable.drake_sp));
+        songs.add(new SongObject("God's plan", "Drake", "Scorpion", R.drawable.drake_gods_plan));
+        albums.add(new Album("Scorpion", songs, R.drawable.drake_scorpion_cover));
+        songs = new ArrayList<>();
+        songs.add(new SongObject("Rolling in the deep", "Adele", "Adele21", R.drawable.song91));
+        songs.add(new SongObject("Set fire to the rain", "Adele", "Adele21", R.drawable.song92));
+        albums.add(new Album("Adele21", songs, R.drawable.album9));
+        songs = new ArrayList<>();
+        songs.add(new SongObject("Song of freedom", "Bob Marley and the Wailers", "The Best of Bob Marley and the Wailers"
+                , R.drawable.song81));
+        albums.add(new Album("The Best of Bob Marley and the Wailers", songs, R.drawable.album8));
+        songs = new ArrayList<>();
+        songs.add(new SongObject("What's my name", "Rihanna", "Loud", R.drawable.song71));
+        songs.add(new SongObject("Fade away", "Rihanna", "Loud", R.drawable.song72));
+        albums.add(new Album("Loud", songs, R.drawable.album7));
+        songs = new ArrayList<>();
+        songs.add(new SongObject("A place with no name", "Michael Jackson", "Xscape", R.drawable.song21));
+        albums.add(new Album("Xscape", songs, R.drawable.album2));
+        songs = new ArrayList<>();
+        songs.add(new SongObject("What I like", "Charli XCX", "True Romance", R.drawable.song11));
+        albums.add(new Album("True Romance", songs, R.drawable.album1));
 
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
-    }
 
-    /**
-     * A dummy item representing a piece of content.
-     */
-    public static class DummyItem {
-        public final String id;
-        public final String content;
-        public final String details;
-
-        public DummyItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-        }
-
-        @Override
-        public String toString() {
-            return content;
-        }
+        return albums;
     }
 }

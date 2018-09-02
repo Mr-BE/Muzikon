@@ -6,6 +6,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 
+import java.util.Objects;
+
 public class NowPlaying extends AppCompatActivity {
     boolean isPlaying;
     boolean isRepeating;
@@ -18,7 +20,7 @@ public class NowPlaying extends AppCompatActivity {
         setContentView(R.layout.activity_now_playing);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         SongObject songObject = getIntent().getParcelableExtra("Song");
         isPlaying = getIntent().getBooleanExtra("isPlaying", false);
 
@@ -36,12 +38,19 @@ public class NowPlaying extends AppCompatActivity {
 
         //Play Button
         AppCompatImageView play = findViewById(R.id.now_play);
+        if (isPlaying) {
+            play.setImageResource(R.drawable.pause_grey);
+        } else {
+            play.setImageResource(R.drawable.play_grey);
+        }
         play.setOnClickListener(e->{
             if (isPlaying) {
-                play.setImageResource(R.drawable.ic_play_arrow_24px);
+                play.setImageResource(R.drawable.play_grey);
+                MainActivity.getBottomPlay().setImageResource(R.drawable.play_white);
                 isPlaying = false;
             } else {
                 play.setImageResource(R.drawable.pause_grey);
+                MainActivity.getBottomPlay().setImageResource(R.drawable.pause_white);
                 isPlaying = true;
             }
         });

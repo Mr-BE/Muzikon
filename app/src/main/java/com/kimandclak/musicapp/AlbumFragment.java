@@ -1,6 +1,5 @@
 package com.kimandclak.musicapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -16,27 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kimandclak.musicapp.dummy.DummyContent.DummyItem;
+import com.kimandclak.musicapp.dummy.DummyContent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
  */
 public class AlbumFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 2;
-    private OnListFragmentInteractionListener mListener;
-    List<Album> l;
+
+    int mColumnCount = 2;
+    List<Album> albums;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -45,27 +36,16 @@ public class AlbumFragment extends Fragment {
     public AlbumFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static AlbumFragment newInstance(int columnCount) {
-        AlbumFragment fragment = new AlbumFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public static AlbumFragment makeAlbumFragment() {
+        AlbumFragment albumFragment = new AlbumFragment();
+        albumFragment.albums = DummyContent.getData();
+
+        return albumFragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
          View rootView = inflater.inflate(R.layout.fragment_album_list, container, false);
 
@@ -74,25 +54,18 @@ public class AlbumFragment extends Fragment {
         // Set the adapter
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
 
-        l = new ArrayList<>();
-        SongObject[] myDataset = new SongObject[] {new SongObject("Survival", "Drake","Scorpion",
-                R.drawable.drake_sp ), new SongObject("God's Plan", "Drake","Scorpion", R.drawable.drake_gods_plan)} ;
-        l.add(new Album("Scorpion", myDataset, R.drawable.drake_scorpion_cover));
 
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new AlbumsAdapter(l));
+        recyclerView.setAdapter(new AlbumsAdapter(albums));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Album movie = l.get(position);
-                Toast.makeText(getContext(), movie.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+                Album album = albums.get(position);
                 Intent i = new Intent(getActivity(), InfoActivity.class);
-                i.putExtra("Album", movie);
+                i.putExtra("Album", album);
                 startActivity(i);
-
-
 
             }
 
@@ -106,39 +79,24 @@ public class AlbumFragment extends Fragment {
         return rootView;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
-    }
 
     public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHolder> {
 
-        private Context mContext;
         private List<Album> albumList;
 
+        AlbumsAdapter(List<Album> albumList) {
+            this.albumList = albumList;
+        }
+
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
             Album album = albumList.get(position);
             holder.title.setText(album.getTitle());
             holder.count.setText(album.getNumOfSongs() + getString(R.string.songs));
             holder.thumbnail.setImageResource(album.getThumbnail());
         }
 
-
-        public AlbumsAdapter(List<Album> albumList) {
-            this.albumList = albumList;
-        }
-
+        @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
@@ -152,7 +110,7 @@ public class AlbumFragment extends Fragment {
             public TextView count;
             public ImageView thumbnail;
 
-            public MyViewHolder(View view) {
+            MyViewHolder(View view) {
                 super(view);
                 title = view.findViewById(R.id.title);
                 count = view.findViewById(R.id.count);
@@ -176,14 +134,14 @@ public class AlbumFragment extends Fragment {
         private int spacing;
         private boolean includeEdge;
 
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+        GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
             this.spanCount = spanCount;
             this.spacing = spacing;
             this.includeEdge = includeEdge;
         }
 
         @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
             int position = parent.getChildAdapterPosition(view); // item position
             int column = position % spanCount; // item column
 

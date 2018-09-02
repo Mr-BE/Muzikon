@@ -10,27 +10,61 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+    private static boolean showBottomBar = false;
+    private static BottomAppBar mBottomAppBar;
+    private static LinearLayoutCompat mOpenNowPlay;
+    private static AppCompatImageView mSongImg;
+    private static AppCompatTextView mTitle;
+    private static AppCompatTextView mOtherInfo;
+    private static AppCompatImageView mBottomPlay;
+    private static SongObject mSong;
+
+    public static void setShowBottomBar(boolean value) {
+        showBottomBar = value;
+    }
+
+    public static void setSongDetails(SongObject song) {
+        //Setting Song thumbnail on bottom bar
+        mSongImg.setImageResource(song.getmImageId());
+
+        //Setting main info text
+        mTitle.setText(song.getmTitle());
+
+        //Setting sub info text
+        mOtherInfo.setText(song.getmArtist() + "-" + song.getmAlbum());
+    }
+
+    public static LinearLayoutCompat getOpenNowPlay() {
+        return mOpenNowPlay;
+    }
+
+    public static BottomAppBar getBottomAppBar() {
+        return mBottomAppBar;
+    }
+
+    public static SongObject getSong() {
+        return mSong;
+    }
+
+    public static void setSong(SongObject song) {
+        mSong = song;
+    }
+
+    public static AppCompatImageView getBottomPlay() {
+        return mBottomPlay;
+    }
 
 
     @Override
@@ -42,29 +76,41 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Hide bottom app bar
-        BottomAppBar bottomAppBar = findViewById(R.id.bottom_bar);
-        bottomAppBar.setVisibility(View.INVISIBLE);
+        if (mBottomAppBar == null) {
+            mBottomAppBar = findViewById(R.id.bottom_bar);
+            mSongImg = findViewById(R.id.bottom_bar_thumbnail);
+            mTitle = findViewById(R.id.bottom_bar_main_text);
+            mOpenNowPlay = findViewById(R.id.open_now_play);
+            mOtherInfo = findViewById(R.id.bottom_bar_sub_text);
+            mBottomPlay = findViewById(R.id.bottom_bar_play);
+        }
+        if (showBottomBar) {
+            if (mSong != null)
+                setSongDetails(mSong);
+
+        } else
+            mBottomAppBar.setVisibility(View.INVISIBLE);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        ViewPager viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setTabTextColors(0xFFCBCBCB, 0xFFFFFFFF);
+        tabLayout.setTabTextColors(0xFFA7A6A7, 0xFFFFFFFF);
 
         // Connect the tab layout with the view pager. This will
         //   1. Update the tab layout when the view pager is swiped
         //   2. Update the view pager when a tab is selected
         //   3. Set the tab layout's tab names with the view pager's adapter's titles
         //      by calling onPageTitle()
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
     }
 
@@ -75,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -92,8 +139,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -101,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         private Context mContext;
 
-        public SectionsPagerAdapter(FragmentManager fm, Context context) {
+        SectionsPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             mContext = context;
         }
@@ -110,11 +155,9 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
-                    SongsFragment sf = new SongsFragment();
-                    return sf;
+                    return SongsFragment.makeSongsFragment();
                 case  1:
-                    AlbumFragment abf = new AlbumFragment();
-                    return abf;
+                    return AlbumFragment.makeAlbumFragment();
                 default:
                     return null;
             }

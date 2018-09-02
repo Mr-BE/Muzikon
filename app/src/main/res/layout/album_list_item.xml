@@ -33,6 +33,7 @@
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
                 android:paddingTop="@dimen/album_title_padding"
+                android:singleLine="true"
                 android:textColor="@color/album_title"
                 android:textSize="@dimen/album_title" />
 
@@ -44,6 +45,7 @@
                 android:paddingBottom="@dimen/songs_count_padding_bottom"
                 android:paddingLeft="@dimen/album_title_padding"
                 android:paddingRight="@dimen/album_title_padding"
+                android:singleLine="true"
                 android:textColor="@color/app_pink"
                 android:textSize="@dimen/text_size_small" />
 

@@ -3,12 +3,15 @@ package com.kimandclak.musicapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * A song track sang by an artist
+ */
 public class SongObject implements Parcelable {
 
-    String mTitle;
-    String mArtist;
-    String mAlbum;
-    int mImageId;
+    private String mTitle;
+    private String mArtist;
+    private String mAlbum;
+    private int mImageId;
 
     public SongObject(String title, String artist, String album, int imageId){
         mTitle = title;

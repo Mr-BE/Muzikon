@@ -3,23 +3,26 @@ package com.kimandclak.musicapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
 
+/**
+ * An Album is a collection of songs by one or more artists
+ */
 public class Album implements Parcelable {
     private String mTitle;
     private String mArtist;
-    private SongObject[] mSongs;
+    private List<SongObject> mSongs;
     private int mThumbnail;
 
-    public Album(String title, SongObject[] songs, int imageResId){
+    public Album(String title, List<SongObject> songs, int imageResId) {
         mTitle = title;
         mSongs = songs;
         mThumbnail = imageResId;
-        for(int i =0; i < songs.length; i++){
-            if(!songs[0].getmArtist().equals(songs[i].getmArtist())){
+        for (int i = 0; i < songs.size(); i++) {
+            if (!songs.get(0).getmArtist().equals(songs.get(i).getmArtist())) {
                 mArtist = "Various Artist";
-            }
-            else{
-                mArtist = songs[0].getmArtist();
+            } else {
+                mArtist = songs.get(0).getmArtist();
             }
         }
     }
@@ -28,7 +31,7 @@ public class Album implements Parcelable {
     protected Album(Parcel in) {
         mTitle = in.readString();
         mArtist = in.readString();
-        mSongs = in.createTypedArray(SongObject.CREATOR);
+        mSongs = in.createTypedArrayList(SongObject.CREATOR);
         mThumbnail = in.readInt();
     }
 
@@ -52,7 +55,7 @@ public class Album implements Parcelable {
         return mArtist;
     }
 
-    public SongObject[] getSongs() {
+    public List<SongObject> getSongs() {
         return mSongs;
     }
 
@@ -61,7 +64,7 @@ public class Album implements Parcelable {
     }
 
     public int getNumOfSongs(){
-        return mSongs.length;
+        return mSongs.size();
     }
 
     @Override
@@ -73,7 +76,7 @@ public class Album implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mTitle);
         parcel.writeString(mArtist);
-        parcel.writeTypedArray(mSongs, i);
+        parcel.writeTypedList(mSongs);
         parcel.writeInt(mThumbnail);
     }
 }
