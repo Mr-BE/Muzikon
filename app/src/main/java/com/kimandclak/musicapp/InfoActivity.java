@@ -66,6 +66,9 @@ public class InfoActivity extends AppCompatActivity {
                 //Set details on main activity bottom bar;
                 MainActivity.setSongDetails(song);
 
+                if (MainActivity.getBottomAppBar().getVisibility() != View.VISIBLE)
+                    MainActivity.getBottomAppBar().setVisibility(View.VISIBLE);
+
                 //Open Now playing activity
                 Intent i = new Intent(InfoActivity.this, NowPlaying.class);
                 i.putExtra("Song", song);

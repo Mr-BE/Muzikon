@@ -36,13 +36,6 @@ public class AlbumFragment extends Fragment {
     public AlbumFragment() {
     }
 
-    public static AlbumFragment makeAlbumFragment() {
-        AlbumFragment albumFragment = new AlbumFragment();
-        albumFragment.albums = DummyContent.getData();
-
-        return albumFragment;
-    }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -57,6 +50,9 @@ public class AlbumFragment extends Fragment {
 
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        //create data
+        albums = DummyContent.getData();
 
         recyclerView.setAdapter(new AlbumsAdapter(albums));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerView, new RecyclerTouchListener.ClickListener() {

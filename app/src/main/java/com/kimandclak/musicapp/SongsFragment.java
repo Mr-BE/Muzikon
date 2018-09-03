@@ -1,11 +1,10 @@
 package com.kimandclak.musicapp;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.bottomappbar.BottomAppBar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,9 +18,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class SongsFragment extends Fragment{
-    List<SongObject> myDataset;
+    private static List<SongObject> myDataset;
     private RecyclerView.Adapter mAdapter;
-    SongObject song;
+    private SongObject song;
     /**
      * The fragment argument representing a list of songs.
      */
@@ -35,21 +34,16 @@ public class SongsFragment extends Fragment{
     public SongsFragment() {
     }
 
-    public static SongsFragment makeSongsFragment() {
-        SongsFragment songsFragment = new SongsFragment();
-        songsFragment.myDataset = new ArrayList<>();
-        List<Album> albums = DummyContent.getData();
-        for (Album album : albums) {
-            for (int i = 0; i < (album.getNumOfSongs()); i++) {
-                songsFragment.myDataset.add(album.getSongs().get(i));
-            }
-        }
-        return songsFragment;
+
+    private void setDataset(SongObject song) {
+        if (myDataset == null)
+            myDataset = new ArrayList();
+        myDataset.add(song);
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = rootView.findViewById(R.id.song_recycler);
@@ -58,6 +52,14 @@ public class SongsFragment extends Fragment{
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.addItemDecoration(new MyDividerItemDecoration(Objects.requireNonNull(getActivity()), LinearLayoutManager.VERTICAL, 16));
+
+        isPlaying = MainActivity.isPlaying();
+        List<Album> albums = DummyContent.getData();
+        for (Album album : albums) {
+            for (int i = 0; i < (album.getNumOfSongs()); i++) {
+                setDataset(album.getSongs().get(i));
+            }
+        }
 
         // specify an adapter
         mAdapter = new MyRecyclerViewAdapter(myDataset);
@@ -68,6 +70,7 @@ public class SongsFragment extends Fragment{
             public void onClick(View view, int position) {
                 song = myDataset.get(position);
                 isPlaying = true;
+                MainActivity.setPlaying(true);
                 setupBottomAppBar(song);
             }
 
@@ -88,20 +91,10 @@ public class SongsFragment extends Fragment{
         MainActivity.setSongDetails(song);
         MainActivity.setSong(song);
 
-        //Setup Now playing opening from bottom app bar
-        LinearLayoutCompat openNowPlay = MainActivity.getOpenNowPlay();
-        openNowPlay.setOnClickListener(e -> {
-            Intent i = new Intent(getActivity(), NowPlaying.class);
-            i.putExtra("Song", MainActivity.getSong());
-            i.putExtra("isPlaying", isPlaying);
-            startActivity(i);
-        });
-
         //Show Bottom app bar
         BottomAppBar bottomAppBar = MainActivity.getBottomAppBar();
         bottomAppBar.setVisibility(View.VISIBLE);
         MainActivity.setShowBottomBar(true);
-
 
         //Setting up play/pause button.
         AppCompatImageView bottomPlay = MainActivity.getBottomPlay();
@@ -110,15 +103,6 @@ public class SongsFragment extends Fragment{
         } else {
             bottomPlay.setImageResource(R.drawable.play_white);
         }
-        bottomPlay.setOnClickListener(e -> {
-            if (isPlaying) {
-                bottomPlay.setImageResource(R.drawable.play_white);
-                isPlaying = false;
-            } else {
-                bottomPlay.setImageResource(R.drawable.pause_white);
-                isPlaying = true;
-            }
-        });
-    }
 
+    }
 }

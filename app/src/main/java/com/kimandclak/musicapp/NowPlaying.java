@@ -40,8 +40,10 @@ public class NowPlaying extends AppCompatActivity {
         AppCompatImageView play = findViewById(R.id.now_play);
         if (isPlaying) {
             play.setImageResource(R.drawable.pause_grey);
+            MainActivity.getBottomPlay().setImageResource(R.drawable.pause_white);
         } else {
             play.setImageResource(R.drawable.play_grey);
+            MainActivity.getBottomPlay().setImageResource(R.drawable.play_white);
         }
         play.setOnClickListener(e->{
             if (isPlaying) {

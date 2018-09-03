@@ -1,6 +1,6 @@
 package com.kimandclak.musicapp;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.bottomappbar.BottomAppBar;
@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private static AppCompatTextView mOtherInfo;
     private static AppCompatImageView mBottomPlay;
     private static SongObject mSong;
+
+    static boolean isPlaying;
 
     public static void setShowBottomBar(boolean value) {
         showBottomBar = value;
@@ -66,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
         return mBottomPlay;
     }
 
+    public static boolean isPlaying() {
+        return isPlaying;
+    }
+
+
+    public static void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +91,25 @@ public class MainActivity extends AppCompatActivity {
             mSongImg = findViewById(R.id.bottom_bar_thumbnail);
             mTitle = findViewById(R.id.bottom_bar_main_text);
             mOpenNowPlay = findViewById(R.id.open_now_play);
+            mOpenNowPlay.setOnClickListener(e -> {
+                Intent i = new Intent(this, NowPlaying.class);
+                i.putExtra("Song", MainActivity.getSong());
+                i.putExtra("isPlaying", isPlaying);
+                startActivity(i);
+            });
+
             mOtherInfo = findViewById(R.id.bottom_bar_sub_text);
             mBottomPlay = findViewById(R.id.bottom_bar_play);
+            mBottomPlay.setOnClickListener(e -> {
+                if (isPlaying) {
+                    mBottomPlay.setImageResource(R.drawable.play_white);
+                    isPlaying = false;
+                } else {
+                    mBottomPlay.setImageResource(R.drawable.pause_white);
+                    isPlaying = true;
+                }
+            });
+
         }
         if (showBottomBar) {
             if (mSong != null)
@@ -91,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
         } else
             mBottomAppBar.setVisibility(View.INVISIBLE);
 
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         ViewPager viewPager = findViewById(R.id.container);
@@ -144,20 +171,18 @@ public class MainActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private Context mContext;
 
-        SectionsPagerAdapter(FragmentManager fm, Context context) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            mContext = context;
         }
 
         @Override
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
-                    return SongsFragment.makeSongsFragment();
+                    return new SongsFragment();
                 case  1:
-                    return AlbumFragment.makeAlbumFragment();
+                    return new AlbumFragment();
                 default:
                     return null;
             }
@@ -168,9 +193,9 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch(position) {
                 case 0:
-                    return mContext.getString(R.string.tab_text_1);
+                    return getString(R.string.tab_text_1);
                 case 1:
-                    return getBaseContext().getString(R.string.tab_text_2);
+                    return getString(R.string.tab_text_2);
                 default:
                     return null;
             }
